@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.popflicks.DetailActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/frame_title"
+            android:layout_width="@dimen/zero_margin"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/frame_title_padding"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingTop="@dimen/frame_title_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/text_view_title"
+                style="@style/ErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/title_font_size"
+                tools:layout_editor_absoluteX="zero_margin"
+                tools:layout_editor_absoluteY="zero_margin"
+                tools:text="@string/placeholder_title" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/image_view_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:src="@drawable/placeholder_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame_title" />
+
+        <TextView
+            android:id="@+id/text_view_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:textSize="@dimen/release_date_font_size"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+            app:layout_constraintTop_toBottomOf="@+id/frame_title"
+            tools:text="@string/placeholder_release_date" />
+
+        <TextView
+            android:id="@+id/text_view_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:textSize="@dimen/rating_font_size"
+            android:textStyle="italic"
+            app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_release_date"
+            tools:text="@string/placeholder_rating" />
+
+        <TextView
+            android:id="@+id/text_view_synopsis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_short"
+            android:gravity="start"
+            android:padding="@dimen/margin_standard"
+            android:textAlignment="viewStart"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_detail"
+            tools:text="@string/placeholder_synopsis" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

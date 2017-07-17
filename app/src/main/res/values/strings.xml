@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Pop Flicks</string>
+    <string name="error_empty_state">Network not found.\nPlease reconnect and try again.</string>
+    <string name="sort_most_popular">Most Popular</string>
+    <string name="sort_highest_rated">Highest Rated</string>
+    <string name="user_rating_max">/10</string>
+
+    <!-- Strings for layout testing purposes -->
+    <string name="placeholder_title">The Movie Title</string>
+    <string name="placeholder_release_date">2022</string>
+    <string name="placeholder_rating">8.5</string>
+    <string name="placeholder_synopsis">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+        vel iaculis mi. Quisque at auctor felis. Nulla rhoncus eget ligula in sollicitudin. Vivamus vitae odio
+        sed lorem pellentesque commodo. Pellentesque fermentum ex dolor, vitae sagittis ipsum pharetra id. </string>
+</resources>
