@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,9 @@ import android.widget.Toast;
 import com.example.android.popflicks.data.MovieLoader;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Pop Flicks
@@ -35,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * Member variables
      */
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
-    private LinearLayout mLayoutEmptyView;
-    private ProgressBar mProgressBar;
+    @BindView(R.id.container_empty_state) LinearLayout mLayoutEmptyView;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
     private String meQueryFilter;
 
     /**
@@ -62,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * Most popular movies; or
      * Top rated movies.
      */
-    public static final String QUERY_POPULAR = "popular?";
-    public static final String QUERY_TOP_RATED = "top_rated?";
+    public static final String QUERY_POPULAR = "popular?api_key=";
+    public static final String QUERY_TOP_RATED = "top_rated?api_key=";
     public static final String QUERY_TYPE = "type";
 
     @Override
@@ -71,17 +76,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Find a layout reference for the ProgressBar and pass to a variable
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-
-        // Find a layout reference for the RecyclerView and pass to a variable
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        // Find a layout reference for the empty view container and pass to a variable
-        mLayoutEmptyView = (LinearLayout) findViewById(R.id.container_empty_state);
+        // Bind views with ButterKnife
+        ButterKnife.bind(this);
 
         // Set a GridLayoutManager to the RecyclerView
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(this, numberOfColumns());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Set fix size to the RecyclerView
@@ -228,6 +227,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setVisibility(View.VISIBLE);
         // Hide ProgressBar
         mProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Dynamically calculate the number of columns and the layout to adapt to the screen size and orientation
+     * */
+    private int numberOfColumns() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int widthDivider = 350;
+            int width = displayMetrics.widthPixels;
+            int nColumns = width / widthDivider;
+            if (nColumns >= 3) return 3;
+            if (nColumns <= 2) return 2;
+        } else {
+            return 2;
+        }
+        return 2;
     }
 
 }

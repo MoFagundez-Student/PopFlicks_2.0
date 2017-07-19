@@ -10,15 +10,21 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.android.popflicks.MainActivity.PARCELABLE_KEY;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private TextView mTitle;          // Original movie title
-    private TextView mSynopsis;       // Plot synopsis
-    private TextView mRating;         // User rating from the community
-    private TextView mReleaseDate;    // Movie release date
-    private ImageView mThumbnail;     // Poster image thumbnail
+    /**
+     * Using ButterKnife to automatically finds each field by the specified ID.
+     */
+    @BindView(R.id.text_view_title)         TextView mTitle;          // Original movie title
+    @BindView(R.id.text_view_synopsis)      TextView mSynopsis;       // Plot synopsis
+    @BindView(R.id.text_view_rating)        TextView mRating;         // User rating from the community
+    @BindView(R.id.text_view_release_date)  TextView mReleaseDate;    // Movie release date
+    @BindView(R.id.image_view_detail)       ImageView mThumbnail;     // Poster image thumbnail
     private Movie mMovie;
 
     @Override
@@ -26,12 +32,16 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        // Bind views with ButterKnife
+        ButterKnife.bind(this);
+
         // Get intent sent from previous activity
         Intent intent = getIntent();
-        // Assign the intent content to movie object
-        mMovie = intent.getParcelableExtra(PARCELABLE_KEY);
-        // Populate the variables with XML elements
-        displayUI();
+        // Check if intent contains any data
+        if (intent.hasExtra(PARCELABLE_KEY)) {
+            // Assign the intent content to movie object
+            mMovie = intent.getParcelableExtra(PARCELABLE_KEY);
+        }
 
         // Check connectivity
         if (!MainActivity.networkConnectionIsNull(this)) {
@@ -41,20 +51,6 @@ public class DetailActivity extends AppCompatActivity {
             // Hide fields from the user
             hideUI();
         }
-
-    }
-
-    /**
-     * Find the XML elements that will be used to display the movie information
-     * to the user so they can be manipulated through Java code
-     */
-    private void displayUI() {
-        // Find XML elements and assign to variables
-        mTitle = (TextView) findViewById(R.id.text_view_title);
-        mThumbnail = (ImageView) findViewById(R.id.image_view_detail);
-        mReleaseDate = (TextView) findViewById(R.id.text_view_release_date);
-        mRating = (TextView) findViewById(R.id.text_view_rating);
-        mSynopsis = (TextView) findViewById(R.id.text_view_synopsis);
     }
 
     /**
@@ -65,6 +61,8 @@ public class DetailActivity extends AppCompatActivity {
         // Load movie data into the variables
         mTitle.setText(mMovie.getTitle());
         Picasso.with(this).load(mMovie.getThumbnail())
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_error)
                 .into(mThumbnail);
         mReleaseDate.setText(mMovie.getReleaseDate());
         mRating.setText(mMovie.getRating() + getResources().getString(R.string.user_rating_max));

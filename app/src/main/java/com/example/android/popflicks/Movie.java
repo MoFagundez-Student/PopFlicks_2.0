@@ -1,5 +1,8 @@
 package com.example.android.popflicks;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Pop Flicks
  * Created by Mauricio on July 10, 2017
@@ -7,9 +10,6 @@ package com.example.android.popflicks;
  * Udacity Android Developer Nanodegree
  * Project 1: Popular Movies - Stage 1
  */
-
-import android.os.Parcel;
-import android.os.Parcelable;
 
 /** Since we are creating a favourite movies app, we are going to create this class
  * {@link Movie} and instantiate for every movie title we retrieve from the API.
@@ -19,11 +19,21 @@ import android.os.Parcelable;
  * */
 public class Movie implements Parcelable {
 
+    /** Member variables */
     private String mTitle;          // Original movie title
     private String mSynopsis;       // Plot synopsis
     private String mRating;         // User rating from the community
     private String mReleaseDate;    // Movie release date
     private String mThumbnail;      // Poster image thumbnail
+
+    /** Constants */
+    private static final int PARCELABLE_SIZE = 5;
+    private static final int PARCELABLE_POSITION_TITLE = 0;
+    private static final int PARCELABLE_POSITION_SYNOPSIS = 1;
+    private static final int PARCELABLE_POSITION_RATING = 2;
+    private static final int PARCELABLE_POSITION_RELEASE_DATE = 3;
+    private static final int PARCELABLE_POSITION_THUMBNAIL = 4;
+    private static final int ZERO_CONTENT = 0;
 
     /** Class default constructor */
     public Movie(String mTitle, String mSynopsis, String mRating, String mReleaseDate, String mThumbnail) {
@@ -69,7 +79,7 @@ public class Movie implements Parcelable {
 
     @Override
     public int describeContents() {
-        return 0;
+        return ZERO_CONTENT;
     }
 
     /**
@@ -92,13 +102,13 @@ public class Movie implements Parcelable {
      * */
     public Movie(Parcel in)
     {
-        String[] data = new String[5];
+        String[] data = new String[PARCELABLE_SIZE];
         in.readStringArray(data);
-        this.mTitle = data[0];
-        this.mSynopsis = data[1];
-        this.mRating = data[2];
-        this.mReleaseDate = data[3];
-        this.mThumbnail = data[4];
+        this.mTitle = data[PARCELABLE_POSITION_TITLE];
+        this.mSynopsis = data[PARCELABLE_POSITION_SYNOPSIS];
+        this.mRating = data[PARCELABLE_POSITION_RATING];
+        this.mReleaseDate = data[PARCELABLE_POSITION_RELEASE_DATE];
+        this.mThumbnail = data[PARCELABLE_POSITION_THUMBNAIL];
     }
 
 }

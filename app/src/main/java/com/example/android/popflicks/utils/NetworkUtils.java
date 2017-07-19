@@ -39,10 +39,8 @@ public final class NetworkUtils {
     /** Constant to perform query on the movie thumbnail */
     private static final String BASE_URL_THUMBNAIL = "http://image.tmdb.org/t/p/w342/";
 
-    /** Student API Key
-     * TODO: Insert your own API to test the application
-     */
-    private static final String API_KEY = "";
+    /** Student API Key */
+    private static final String STUDENT_API_KEY = BuildConfig.API_KEY;
 
     /** Constant fields to parse JSON:
      *      JSON_RESULTS used to retrieve array of results
@@ -81,7 +79,7 @@ public final class NetworkUtils {
         URL url = null;
         // Concatenate URL depending on which sort is being used:
         // Popular or Top Rated
-        String queryUrl = BASE_URL_QUERY + queryType + API_KEY;
+        String queryUrl = BASE_URL_QUERY + queryType + STUDENT_API_KEY;
         try {
             // Form the query URL
             url = new URL(queryUrl);
