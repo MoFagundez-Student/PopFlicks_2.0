@@ -3,6 +3,7 @@ package com.example.android.popflicks.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.android.popflicks.BuildConfig;
 import com.example.android.popflicks.Movie;
 import com.example.android.popflicks.data.MovieLoader;
 
