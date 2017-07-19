@@ -18,7 +18,7 @@ import static com.example.android.popflicks.MainActivity.PARCELABLE_KEY;
 public class DetailActivity extends AppCompatActivity {
 
     /**
-     * Using ButterKnife to automatically finds each field by the specified ID.
+     * Using ButterKnife to automatically find each field by the specified ID.
      */
     @BindView(R.id.text_view_title)         TextView mTitle;          // Original movie title
     @BindView(R.id.text_view_synopsis)      TextView mSynopsis;       // Plot synopsis
