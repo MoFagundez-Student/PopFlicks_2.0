@@ -6,23 +6,23 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.popflicks.DetailActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/layout_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/frame_title"
-            android:layout_width="@dimen/zero_margin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:paddingBottom="@dimen/frame_title_padding"
             android:paddingLeft="@dimen/margin_standard"
             android:paddingStart="@dimen/margin_standard"
-            android:paddingTop="@dimen/frame_title_padding"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard"
+            android:paddingTop="@dimen/frame_title_padding">
 
             <TextView
                 android:id="@+id/text_view_title"
@@ -30,61 +30,163 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="@dimen/title_frame_font_size"
                 tools:layout_editor_absoluteX="zero_margin"
                 tools:layout_editor_absoluteY="zero_margin"
                 tools:text="@string/placeholder_title" />
-
         </FrameLayout>
 
-        <ImageView
-            android:id="@+id/image_view_detail"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:layout_marginLeft="@dimen/margin_standard"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:src="@drawable/ic_placeholder"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frame_title" />
+            android:layout_marginBottom="@dimen/margin_standard">
+
+            <ImageView
+                android:id="@+id/image_view_detail"
+                android:layout_width="@dimen/thumbnail_custom_width"
+                android:layout_height="@dimen/thumbnail_custom_height"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_placeholder"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/label_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:text="@string/label_release_date"
+                android:textSize="@dimen/label_font_size"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/text_view_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:textSize="@dimen/description_font_size"
+                android:textStyle="italic"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/label_release_date"
+                tools:text="@string/placeholder_release_date" />
+
+            <TextView
+                android:id="@+id/label_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:text="@string/label_rating"
+                android:textSize="@dimen/label_font_size"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_release_date" />
+
+            <TextView
+                android:id="@+id/text_view_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:textSize="@dimen/description_font_size"
+                android:textStyle="italic"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/label_rating"
+                tools:text="@string/placeholder_rating" />
+
+            <TextView
+                android:id="@+id/label_trailers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:text="@string/label_trailer"
+                android:textSize="@dimen/label_font_size"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintStart_toEndOf="@id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_rating" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/layout_trailers"
+                android:layout_width="@dimen/zero_margin"
+                android:layout_height="@dimen/zero_margin"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginEnd="@dimen/margin_standard"
+                android:layout_marginRight="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_short"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/label_trailers" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
-            android:id="@+id/text_view_release_date"
+            android:id="@+id/label_synopsis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_standard"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:textSize="@dimen/release_date_font_size"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
-            app:layout_constraintTop_toBottomOf="@+id/frame_title"
-            tools:text="@string/placeholder_release_date" />
-
-        <TextView
-            android:id="@+id/text_view_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_standard"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:textSize="@dimen/rating_font_size"
-            android:textStyle="italic"
-            app:layout_constraintLeft_toRightOf="@+id/image_view_detail"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_release_date"
-            tools:text="@string/placeholder_rating" />
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/zero_margin"
+            android:text="@string/label_synopsis"
+            android:textSize="@dimen/label_font_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_synopsis"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_short"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/zero_margin"
             android:gravity="start"
-            android:padding="@dimen/margin_standard"
             android:textAlignment="viewStart"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_view_detail"
             tools:text="@string/placeholder_synopsis" />
 
-    </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/label_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:text="@string/label_reviews"
+            android:textSize="@dimen/label_font_size"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layout_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </ScrollView>

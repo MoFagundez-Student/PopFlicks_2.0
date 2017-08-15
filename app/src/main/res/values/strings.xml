@@ -1,15 +1,33 @@
 <resources>
     <string name="app_name">Pop Flicks</string>
-    <string name="error_empty_state">Network not found.\nPlease reconnect and try again.</string>
+    <string name="error_empty_state_network">Network not found.\nPlease reconnect and try again.</string>
+    <string name="error_empty_state_favourites">No favourites yet.\nWant to try some new movies?</string>
     <string name="sort_most_popular">Most Popular</string>
     <string name="sort_highest_rated">Highest Rated</string>
+    <string name="sort_favourites">Favourites</string>
     <string name="user_rating_max">/10</string>
+
+    <!-- Toast messages -->
+    <string name="movie_added_favourite">The movie was added to your Favourite list</string>
+    <string name="movie_removed_favourite">The movie was removed from your Favourite list</string>
+
+    <!-- TextView labels -->
+    <string name="label_release_date">Release</string>
+    <string name="label_rating">Rating</string>
+    <string name="label_trailer">Trailers</string>
+    <string name="label_synopsis">Synopsis</string>
+    <string name="label_reviews">Reviews</string>
 
     <!-- Strings for layout testing purposes -->
     <string name="placeholder_title">The Movie Title</string>
     <string name="placeholder_release_date">2022</string>
     <string name="placeholder_rating">8.5</string>
     <string name="placeholder_synopsis">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+        vel iaculis mi. Quisque at auctor felis. Nulla rhoncus eget ligula in sollicitudin. Vivamus vitae odio
+        sed lorem pellentesque commodo. Pellentesque fermentum ex dolor, vitae sagittis ipsum pharetra id. </string>
+    <string name="placeholder_trailer">Trailer</string>
+    <string name="placeholder_review_author">Author</string>
+    <string name="placeholder_review_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
         vel iaculis mi. Quisque at auctor felis. Nulla rhoncus eget ligula in sollicitudin. Vivamus vitae odio
         sed lorem pellentesque commodo. Pellentesque fermentum ex dolor, vitae sagittis ipsum pharetra id. </string>
 </resources>

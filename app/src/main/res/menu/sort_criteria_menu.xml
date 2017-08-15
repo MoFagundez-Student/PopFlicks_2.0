@@ -7,8 +7,13 @@
         android:orderInCategory="1"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/criteria_highest_rated"
+    <item android:id="@+id/criteria_top_rated"
         android:title="@string/sort_highest_rated"
+        android:orderInCategory="1"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/criteria_favourites"
+        android:title="@string/sort_favourites"
         android:orderInCategory="1"
         app:showAsAction="never"/>
 

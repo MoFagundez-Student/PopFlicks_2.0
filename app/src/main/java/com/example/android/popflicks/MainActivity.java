@@ -1,12 +1,9 @@
 package com.example.android.popflicks;
 
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -19,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popflicks.data.MovieLoader;
@@ -27,6 +25,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.android.popflicks.utils.NetworkUtils.networkConnectionIsNull;
 
 /**
  * Pop Flicks
@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private MovieAdapter mMovieAdapter;
     @BindView(R.id.container_empty_state) LinearLayout mLayoutEmptyView;
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
-    private String meQueryFilter;
+    private String mQueryFilter;
+    @BindView(R.id.text_view_error_message) TextView mErrorMessageTextView;
+    private boolean mIsShowingFavouriteMovie = false;
 
     /**
      * Log tag constant used with error messages
@@ -65,10 +67,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * Constants used to define type of query being made:
      * <p>
      * Most popular movies; or
-     * Top rated movies.
+     * Top rated movies; or
+     * Favourite movies.
      */
     public static final String QUERY_POPULAR = "popular?api_key=";
     public static final String QUERY_TOP_RATED = "top_rated?api_key=";
+    public static final String QUERY_REVIEWS = "/reviews?api_key=";
+    public static final String QUERY_TRAILERS = "/videos?api_key=";
+    public static final String QUERY_FAVOURITES = "favourites";
     public static final String QUERY_TYPE = "type";
 
     @Override
@@ -86,14 +92,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Set fix size to the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
-        // Check if network connection exist and properly update the UI
-        if (!networkConnectionIsNull(this)) {
-            // Kick off LoaderManager
-            getLoaderManager().initLoader(LOADERMANAGER_INSTANCE, null, MainActivity.this);
-        } else {
-            // Display error message
-            showErrorMessage();
-        }
+        // Kick off LoaderManager
+        getLoaderManager().initLoader(LOADERMANAGER_INSTANCE, null, MainActivity.this);
+
     }
 
     @Override
@@ -104,22 +105,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (args == null) {
             // Bundle is null so we assume the app is starting, so default behaviour
             // is to load top rated movies
-            meQueryFilter = QUERY_TOP_RATED;
+            mQueryFilter = QUERY_TOP_RATED;
         } else {
             // If user has made a selection, MovieLoader will load the correct URL from Bundle
-            meQueryFilter = args.getString(QUERY_TYPE);
+            mQueryFilter = args.getString(QUERY_TYPE);
         }
-        //return new MovieLoader
-        return new MovieLoader(this, meQueryFilter);
+        // Return new MovieLoader
+        return new MovieLoader(this, mQueryFilter);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
-        // Show movie data in the UI
-        showMovieData();
-        // Set MovieAdapter to properly display data into the RecyclerView
-        mMovieAdapter = new MovieAdapter(data, this, this);
-        mRecyclerView.setAdapter(mMovieAdapter);
+        // Show movie data in the UI if data is not null
+        if (null != data && data.size() > 0) {
+            showMovieData();
+            // Set MovieAdapter to properly display data into the RecyclerView
+            mMovieAdapter = new MovieAdapter(data, this, this);
+            mRecyclerView.setAdapter(mMovieAdapter);
+        } else {
+            showErrorMessage();
+        }
     }
 
     @Override
@@ -132,20 +137,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     @Override
     public void onClick(Movie movie) {
-        if (!networkConnectionIsNull(this)) {
+        if (!networkConnectionIsNull(this) || mIsShowingFavouriteMovie) {
             // Create new intent
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             // Put movie information into the intent
             intent.putExtra(PARCELABLE_KEY, new Movie(
+                    movie.getId(),
                     movie.getTitle(),
                     movie.getSynopsis(),
                     movie.getRating(),
                     movie.getReleaseDate(),
-                    movie.getThumbnail()));
+                    movie.getThumbnail(),
+                    movie.getImageBlob()
+            ));
             // Start new DetailActivity
             this.startActivity(intent);
         } else {
-            Toast.makeText(this, getString(R.string.error_empty_state), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_empty_state_network), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -173,36 +181,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (!networkConnectionIsNull(this)) {
-            // Create a new Bundle
-            Bundle bundle = new Bundle();
-            // Check which menu item is being selected
-            switch (item.getItemId()) {
-                // If filter criteria is most popular:
-                case R.id.criteria_most_popular:
-                    // Pass query type as most popular so LoaderManager can load the correct URL
-                    bundle.putString(QUERY_TYPE, QUERY_POPULAR);
-                    break;
-                default:
-                    // Pass query type as top rated so LoaderManager can load the correct URL
-                    bundle.putString(QUERY_TYPE, QUERY_TOP_RATED);
-                    break;
-            }
-            // Restart LoaderManager to show new data in the screen
-            getLoaderManager().restartLoader(LOADERMANAGER_INSTANCE, bundle, MainActivity.this);
-        } else {
-            showErrorMessage();
+        Bundle bundle = new Bundle();
+        // Check which menu item is being selected
+        switch (item.getItemId()) {
+            // If filter criteria is most popular:
+            case R.id.criteria_most_popular:
+                // Pass query type as most popular so LoaderManager can load the correct URL
+                bundle.putString(QUERY_TYPE, QUERY_POPULAR);
+                mIsShowingFavouriteMovie = false;
+                break;
+            case R.id.criteria_top_rated:
+                // Pass query type as top rated so LoaderManager can load the correct URL
+                bundle.putString(QUERY_TYPE, QUERY_TOP_RATED);
+                mIsShowingFavouriteMovie = false;
+                break;
+            default:
+                // Pass query type as favourites so ContentProvider can load from database
+                bundle.putString(QUERY_TYPE, QUERY_FAVOURITES);
+                mIsShowingFavouriteMovie = true;
+                break;
         }
+        // Restart LoaderManager to show new data in the screen
+        getLoaderManager().restartLoader(LOADERMANAGER_INSTANCE, bundle, MainActivity.this);
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Check whether or not network connectivity is available and return boolean value
-     */
-    public static boolean networkConnectionIsNull(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return !(activeNetwork != null && activeNetwork.isConnectedOrConnecting());
     }
 
     /**
@@ -211,6 +212,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void showErrorMessage() {
         // Hide visible data
         mRecyclerView.setVisibility(View.INVISIBLE);
+        // Set error message text to 'network error' (default)
+        mErrorMessageTextView.setText(getString(R.string.error_empty_state_network));
+        if (mIsShowingFavouriteMovie) {
+            // If query is being filtered by favourites, then set error message to 'empty favourites'
+            mErrorMessageTextView.setText(getString(R.string.error_empty_state_favourites));
+        }
         // Show error message
         mLayoutEmptyView.setVisibility(View.VISIBLE);
         // Hide ProgressBar

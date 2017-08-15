@@ -35,10 +35,11 @@
             android:src="@drawable/ic_popcorn" />
 
         <TextView
+            android:id="@+id/text_view_error_message"
             style="@style/ErrorMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/error_empty_state" />
+            android:text="@string/error_empty_state_network" />
 
     </LinearLayout>
 

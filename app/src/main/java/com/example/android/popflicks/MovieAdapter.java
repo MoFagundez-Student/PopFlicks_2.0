@@ -1,12 +1,15 @@
 package com.example.android.popflicks;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.popflicks.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -53,9 +56,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
      */
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        Picasso.with(mContext).load(mMoviesData.get(position)
-                .getThumbnail())
-                .into(holder.mThumbnailImageView);
+
+        // Load movie poster
+        if (null != mMoviesData.get(position).getImageBlob()) {
+            // Convert from byte to bitmap and inflate the image
+            Bitmap bitmap = BitmapFactory.decodeByteArray(mMoviesData.get(position).getImageBlob(), 0, mMoviesData.get(position).getImageBlob().length);
+            holder.mThumbnailImageView.setImageBitmap(bitmap);
+        } else if (null != mMoviesData.get(position).getThumbnail()) {
+            // Load from web with Picasso
+            Picasso.with(mContext).load(mMoviesData.get(position).getThumbnail())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_error)
+                    .into(holder.mThumbnailImageView);
+        } else {
+            // Show placeholder in case of no image available
+            holder.mThumbnailImageView.setImageResource(R.drawable.ic_placeholder);
+        }
     }
 
     @Override
@@ -82,6 +98,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             // Get adapter position
             int adapterPosition = getAdapterPosition();
             Movie movie = mMoviesData.get(adapterPosition);
+            movie.setImageBlob(Utils.getBytes(mThumbnailImageView.getDrawable()));
             mClickHandler.onClick(movie);
         }
     }

@@ -3,13 +3,21 @@
     <!-- Margin values -->
     <dimen name="margin_standard">16dp</dimen>
     <dimen name="margin_short">8dp</dimen>
-    <dimen name="thumbnail_custom_height">300dp</dimen>
     <dimen name="zero_margin">0dp</dimen>
     <dimen name="frame_title_padding">30dp</dimen>
 
     <!-- Font sizes -->
-    <dimen name="title_font_size">28sp</dimen>
-    <dimen name="release_date_font_size">22sp</dimen>
-    <dimen name="rating_font_size">18sp</dimen>
+    <dimen name="title_frame_font_size">28sp</dimen>
+    <dimen name="label_font_size">18sp</dimen>
+    <dimen name="description_font_size">16sp</dimen>
+    <dimen name="trailer_name_font_size">12sp</dimen>
+
+    <!-- Image sizes -->
+    <dimen name="thumbnail_custom_height">300dp</dimen>
+    <dimen name="thumbnail_custom_width">175dp</dimen>
+    <dimen name="trailer_thumbnail_size">24dp</dimen>
+
+
+
 
 </resources>
