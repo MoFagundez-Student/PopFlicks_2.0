@@ -103,4 +103,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
+    /** Helper method to swap data in the adapter */
+    public void swapData(List<Movie> movies) {
+        this.mMoviesData = movies;
+        notifyDataSetChanged();
+    }
+
 }

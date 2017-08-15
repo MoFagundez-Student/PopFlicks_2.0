@@ -45,14 +45,17 @@ import static com.example.android.popflicks.utils.NetworkUtils.networkConnection
 
 public class DetailActivity extends AppCompatActivity {
 
-    /**
-     * Using ButterKnife to automatically find each field by the specified ID.
-     */
     private static final int PARAMS_ZERO_POSITION = 0;
     private static final int ARRAY_LENGTH = 2;
     private static final int ARRAY_POSITION_TRAILERS_JSON = 0;
     private static final int ARRAY_POSITION_REVIEWS_JSON = 1;
 
+    private static final int REMOVE_FROM_FAVOURITES = 0;
+    private static final int ADD_TO_FAVOURITES = 1;
+
+    /**
+     * Using ButterKnife to automatically find each field by the specified ID.
+     */
     @BindView(R.id.text_view_title)         TextView mTitle;          // Original movie title
     @BindView(R.id.text_view_synopsis)      TextView mSynopsis;       // Plot synopsis
     @BindView(R.id.text_view_rating)        TextView mRating;         // User rating from the community
@@ -123,6 +126,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    /** {@link AsyncTask} to query the database to check of the movie is a Favourite or not */
     private class CheckMovieIsFavourite extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
@@ -144,6 +148,31 @@ public class DetailActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             movieIsFavourite = aBoolean;
             changeStarIfMoveFavourite();
+        }
+    }
+
+    /** Helper class to add or remove Movie from favourites using {@link AsyncTask} */
+    private class AddOrRemoveMovieFavourites extends AsyncTask<Integer, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            if (params[PARAMS_ZERO_POSITION] == ADD_TO_FAVOURITES) {
+                addMovieToFavourites(mMovie);
+
+            } else if (params[PARAMS_ZERO_POSITION] == REMOVE_FROM_FAVOURITES) {
+                deleteMovieFromFavourites(mMovie);
+            }
+            return params[PARAMS_ZERO_POSITION];
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            // Inform user of the successful movie insertion or deletion
+            if (integer == ADD_TO_FAVOURITES) {
+                Toast.makeText(getApplicationContext(), getString(R.string.movie_added_favourite), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.movie_removed_favourite), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -259,10 +288,10 @@ public class DetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add_remove_favourite:
                 if (movieIsFavourite) {
-                    deleteMovieFromFavourites(mMovie);
+                    new AddOrRemoveMovieFavourites().execute(REMOVE_FROM_FAVOURITES);
                     movieIsFavourite = false;
                 } else {
-                    addMovieToFavourites(mMovie);
+                    new AddOrRemoveMovieFavourites().execute(ADD_TO_FAVOURITES);
                     movieIsFavourite = true;
                 }
                 changeStarIfMoveFavourite();
@@ -284,11 +313,8 @@ public class DetailActivity extends AppCompatActivity {
         // Transform movie poster drawable into a bitmap
         //byte[] image = getBytes(mThumbnail.getDrawable());
         values.put(MovieEntry.COLUMN_IMAGE_BLOB, movie.getImageBlob());
-
         // Insert a new movie into de database
         Uri newUri = getContentResolver().insert(MovieEntry.CONTENT_URI, values);
-        // Inform user of the successful product insertion
-        Toast.makeText(this, getString(R.string.movie_added_favourite), Toast.LENGTH_SHORT).show();
     }
 
     /** Delete movie record from database */
@@ -297,9 +323,6 @@ public class DetailActivity extends AppCompatActivity {
         Uri movieUri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI, Long.valueOf(movie.getId()));
         //  Perform db deletion
         int rowsDeleted = getContentResolver().delete(movieUri, null, null);
-        Log.i(LOG_TAG, String.valueOf(rowsDeleted));
-        // Inform user of the successful deletion
-        Toast.makeText(this, getString(R.string.movie_removed_favourite), Toast.LENGTH_SHORT).show();
     }
 
     /** Change star icon (favourite) accordingly if the movie is in the favourite db or not */

@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Kick off LoaderManager
         getLoaderManager().initLoader(LOADERMANAGER_INSTANCE, null, MainActivity.this);
 
+        // Set MovieAdapter to properly display data into the RecyclerView
+        mMovieAdapter = new MovieAdapter(null, this, this);
+        mRecyclerView.setAdapter(mMovieAdapter);
+
     }
 
     @Override
@@ -119,9 +123,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Show movie data in the UI if data is not null
         if (null != data && data.size() > 0) {
             showMovieData();
-            // Set MovieAdapter to properly display data into the RecyclerView
-            mMovieAdapter = new MovieAdapter(data, this, this);
-            mRecyclerView.setAdapter(mMovieAdapter);
+            mMovieAdapter.swapData(data);
         } else {
             showErrorMessage();
         }
